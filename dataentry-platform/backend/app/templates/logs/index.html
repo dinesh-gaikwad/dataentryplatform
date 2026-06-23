@@ -1,17 +1,16 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<section class="panel">
-  <div class="section-head">
-    <div>
-      <h2>Module Ready</h2>
-      <p>Clean, modern, and responsive module shell.</p>
-    </div>
-    <div class="helper-row">
-      <span class="chip">Fast UI</span>
-      <span class="chip">Responsive</span>
-      <span class="chip">Ready</span>
-    </div>
+<section class='panel'>
+  <div class='section-head'><div><h2>Audit Logs</h2><p>Track critical user and system actions.</p></div></div>
+  <div class='table-responsive'>
+    <table class='table table-hover align-middle'>
+      <thead><tr><th>Actor</th><th>Action</th><th>Target</th><th>Time</th></tr></thead>
+      <tbody>
+        {% for l in logs %}
+        <tr><td>{{ l.actor }}</td><td>{{ l.action }}</td><td>{{ l.target }}</td><td>{{ l.created_at }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
-  <div class="empty-card">This section will be expanded next.</div>
 </section>
 {% endblock %}

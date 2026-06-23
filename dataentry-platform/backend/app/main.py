@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -36,18 +37,131 @@ def dashboard(request: Request):
     return render(request, "dashboard/index.html", "Dashboard", "dashboard", counts=counts, recent_records=[dict(x) for x in recent_records])
 
 @app.get("/records", response_class=HTMLResponse)
-def records(request: Request):
+def records(request: Request, q: str = ""):
     conn = get_connection()
-    rows = conn.execute("SELECT * FROM records ORDER BY id DESC").fetchall()
+    cur = conn.cursor()
+    if q:
+        rows = cur.execute(
+            "SELECT * FROM records WHERE ref_no LIKE ? OR title LIKE ? OR category LIKE ? OR owner LIKE ? ORDER BY id DESC",
+            (f"%{q}%", f"%{q}%", f"%{q}%", f"%{q}%")
+        ).fetchall()
+    else:
+        rows = cur.execute("SELECT * FROM records ORDER BY id DESC").fetchall()
     conn.close()
-    return render(request, "records/index.html", "Records", "records", records=[dict(x) for x in rows])
+    return render(request, "records/index.html", "Records", "records", records=[dict(x) for x in rows], q=q)
+
+@app.post("/records/create")
+def record_create(
+    ref_no: str = Form(...),
+    title: str = Form(...),
+    category: str = Form(...),
+    priority: str = Form("medium"),
+    status: str = Form("draft"),
+    owner: str = Form(...),
+    due_date: str = Form("")
+):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO records(ref_no,title,category,priority,status,owner,due_date) VALUES(?,?,?,?,?,?,?)",
+        (ref_no, title, category, priority, status, owner, due_date or None)
+    )
+    conn.commit()
+    conn.close()
+    return RedirectResponse(url="/records", status_code=303)
+
+@app.post("/records/{record_id}/update")
+def record_update(
+    record_id: int,
+    ref_no: str = Form(...),
+    title: str = Form(...),
+    category: str = Form(...),
+    priority: str = Form("medium"),
+    status: str = Form("draft"),
+    owner: str = Form(...),
+    due_date: str = Form("")
+):
+    conn = get_connection()
+    conn.execute(
+        "UPDATE records SET ref_no=?, title=?, category=?, priority=?, status=?, owner=?, due_date=? WHERE id=?",
+        (ref_no, title, category, priority, status, owner, due_date or None, record_id)
+    )
+    conn.commit()
+    conn.close()
+    return RedirectResponse(url="/records", status_code=303)
+
+@app.post("/records/{record_id}/delete")
+def record_delete(record_id: int):
+    conn = get_connection()
+    conn.execute("DELETE FROM records WHERE id=?", (record_id,))
+    conn.commit()
+    conn.close()
+    return RedirectResponse(url="/records", status_code=303)
 
 @app.get("/users", response_class=HTMLResponse)
-def users(request: Request):
+def users(request: Request, q: str = ""):
     conn = get_connection()
-    rows = conn.execute("SELECT * FROM users ORDER BY id DESC").fetchall()
+    cur = conn.cursor()
+    if q:
+        rows = cur.execute(
+            "SELECT * FROM users WHERE full_name LIKE ? OR email LIKE ? OR role LIKE ? ORDER BY id DESC",
+            (f"%{q}%", f"%{q}%", f"%{q}%")
+        ).fetchall()
+    else:
+        rows = cur.execute("SELECT * FROM users ORDER BY id DESC").fetchall()
     conn.close()
-    return render(request, "users/index.html", "Users", "users", users=[dict(x) for x in rows])
+    return render(request, "users/index.html", "Users", "users", users=[dict(x) for x in rows], q=q)
+
+@app.post("/users/create")
+def user_create(
+    full_name: str = Form(...),
+    email: str = Form(...),
+    role: str = Form("user"),
+    status: str = Form("active")
+):
+    conn = get_connection()
+    cur = conn.cursor()
+    exists = cur.execute("SELECT id FROM users WHERE email=?", (email,)).fetchone()
+    if exists:
+        conn.close()
+        raise HTTPException(status_code=400, detail="Email already exists")
+    cur.execute(
+        "INSERT INTO users(full_name,email,role,status) VALUES(?,?,?,?)",
+        (full_name, email, role, status)
+    )
+    conn.commit()
+    conn.close()
+    return RedirectResponse(url="/users", status_code=303)
+
+@app.post("/users/{user_id}/update")
+def user_update(
+    user_id: int,
+    full_name: str = Form(...),
+    email: str = Form(...),
+    role: str = Form("user"),
+    status: str = Form("active")
+):
+    conn = get_connection()
+    cur = conn.cursor()
+    other = cur.execute("SELECT id FROM users WHERE email=? AND id<>?", (email, user_id)).fetchone()
+    if other:
+        conn.close()
+        raise HTTPException(status_code=400, detail="Email already exists")
+    cur.execute(
+        "UPDATE users SET full_name=?, email=?, role=?, status=? WHERE id=?",
+        (full_name, email, role, status, user_id)
+    )
+    conn.commit()
+    conn.close()
+    return RedirectResponse(url="/users", status_code=303)
+
+@app.post("/users/{user_id}/delete")
+def user_delete(user_id: int):
+    conn = get_connection()
+    conn.execute("DELETE FROM users WHERE id=?", (user_id,))
+    conn.commit()
+    conn.close()
+    return RedirectResponse(url="/users", status_code=303)
 
 @app.get("/workflows", response_class=HTMLResponse)
 def workflows(request: Request):

@@ -1,17 +1,16 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<section class="panel">
-  <div class="section-head">
-    <div>
-      <h2>Module Ready</h2>
-      <p>Clean, modern, and responsive module shell.</p>
-    </div>
-    <div class="helper-row">
-      <span class="chip">Fast UI</span>
-      <span class="chip">Responsive</span>
-      <span class="chip">Ready</span>
-    </div>
+<section class='panel'>
+  <div class='section-head'><div><h2>Imports</h2><p>CSV, XLSX, and batch intake jobs.</p></div></div>
+  <div class='table-responsive'>
+    <table class='table table-hover align-middle'>
+      <thead><tr><th>File</th><th>Rows</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for i in imports %}
+        <tr><td>{{ i.filename }}</td><td>{{ i.rows_count }}</td><td><span class='badge-soft warning'>{{ i.status }}</span></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
-  <div class="empty-card">This section will be expanded next.</div>
 </section>
 {% endblock %}

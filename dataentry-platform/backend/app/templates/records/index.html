@@ -1,17 +1,90 @@
-{% extends "base.html" %}
+
+{% extends 'base.html' %}
 {% block content %}
-<section class="panel">
-  <div class="section-head">
+<div class="content-grid">
+  <section class="hero-card">
     <div>
-      <h2>Module Ready</h2>
-      <p>Clean, modern, and responsive module shell.</p>
+      <h2 class="hero-title">Records Center</h2>
+      <p class="hero-sub">Search, review, and manage incoming data entries.</p>
+      <div class="helper-row mt-3">
+        <span class="chip">Search</span><span class="chip">Filter</span><span class="chip">Bulk review</span>
+      </div>
     </div>
     <div class="helper-row">
-      <span class="chip">Fast UI</span>
-      <span class="chip">Responsive</span>
-      <span class="chip">Ready</span>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#recordModal" onclick="openRecordModal()">
+        New Record
+      </button>
+      <button class="btn btn-outline-light">Export</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+      <form class="searchbar" method="get">
+        <i class="bi bi-search"></i>
+        <input name="q" value="{{ q }}" placeholder="Search records...">
+      </form>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead><tr><th>Ref</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Owner</th><th>Due</th><th>Actions</th></tr></thead>
+        <tbody>
+          {% for r in records %}
+          <tr>
+            <td><span class="chip">{{ r.ref_no }}</span></td>
+            <td>{{ r.title }}</td>
+            <td>{{ r.category }}</td>
+            <td><span class="badge-soft info">{{ r.priority }}</span></td>
+            <td><span class="badge-soft success">{{ r.status }}</span></td>
+            <td>{{ r.owner }}</td>
+            <td>{{ r.due_date }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-light"
+                data-bs-toggle="modal"
+                data-bs-target="#recordModal"
+                onclick='openRecordModal({{ r|tojson }})'>Edit</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<div class="modal fade" id="recordModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark text-light border border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title" id="recordModalTitle">New Record</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="recordForm" class="row g-3 p-3" method="post">
+        <input type="hidden" id="record_id" name="record_id">
+        <div class="col-md-6"><input class="form-control" id="ref_no" name="ref_no" placeholder="Reference No" required></div>
+        <div class="col-md-6"><input class="form-control" id="title" name="title" placeholder="Title" required></div>
+        <div class="col-md-4"><input class="form-control" id="category" name="category" placeholder="Category" required></div>
+        <div class="col-md-4">
+          <select class="form-control" id="priority" name="priority">
+            <option value="low">low</option><option value="medium">medium</option><option value="high">high</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <select class="form-control" id="status" name="status">
+            <option value="draft">draft</option><option value="review">review</option><option value="approved">approved</option><option value="rejected">rejected</option>
+          </select>
+        </div>
+        <div class="col-md-6"><input class="form-control" id="owner" name="owner" placeholder="Owner" required></div>
+        <div class="col-md-6"><input class="form-control" id="due_date" name="due_date" placeholder="YYYY-MM-DD"></div>
+        <div class="col-12 d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-danger d-none" id="recordDeleteBtn">Delete</button>
+          <div class="ms-auto d-flex gap-2">
+            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="recordSaveBtn">Save</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
-  <div class="empty-card">This section will be expanded next.</div>
-</section>
+</div>
 {% endblock %}
