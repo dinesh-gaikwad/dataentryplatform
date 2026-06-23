@@ -1,24 +1,65 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="content-grid">
-  <section class="kpi-row">
-    <div class="kpi-card"><span>Records</span><strong>{{ counts.records }}</strong></div>
-    <div class="kpi-card"><span>Users</span><strong>{{ counts.users }}</strong></div>
-    <div class="kpi-card"><span>Workflows</span><strong>{{ counts.workflows }}</strong></div>
-    <div class="kpi-card"><span>Imports</span><strong>{{ counts.imports }}</strong></div>
+  <section class="hero-card">
+    <div>
+      <h2 class="hero-title">Operational data, simplified.</h2>
+      <p class="hero-sub">Entry, review, approval, import, export, and reporting in one workspace.</p>
+      <div class="helper-row mt-3">
+        <span class="chip">Live records</span>
+        <span class="chip">Workflow driven</span>
+        <span class="chip">Audit ready</span>
+      </div>
+    </div>
+    <div class="helper-row">
+      <a class="btn btn-primary" href="/records">Create Record</a>
+      <a class="btn btn-outline-light" href="/imports">Import File</a>
+    </div>
   </section>
+
+  <section class="kpi-row">
+    <div class="kpi-card"><span>Records</span><strong>{{ counts.records }}</strong><small>Tracked</small></div>
+    <div class="kpi-card"><span>Users</span><strong>{{ counts.users }}</strong><small>Active access</small></div>
+    <div class="kpi-card"><span>Workflows</span><strong>{{ counts.workflows }}</strong><small>Routing</small></div>
+    <div class="kpi-card"><span>Imports</span><strong>{{ counts.imports }}</strong><small>Batch files</small></div>
+  </section>
+
   <section class="panel">
-    <h2>Recent Records</h2>
+    <div class="section-head">
+      <div>
+        <h2>Recent Records</h2>
+        <p>Latest entries that need attention, review, or export.</p>
+      </div>
+      <a class="btn btn-outline-light" href="/records">View all</a>
+    </div>
     <div class="table-responsive">
-      <table class="table table-dark table-hover align-middle">
+      <table class="table table-hover align-middle">
         <thead><tr><th>Ref</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Owner</th></tr></thead>
         <tbody>
           {% for r in recent_records %}
-          <tr><td>{{ r.ref_no }}</td><td>{{ r.title }}</td><td>{{ r.category }}</td><td>{{ r.priority }}</td><td>{{ r.status }}</td><td>{{ r.owner }}</td></tr>
+          <tr>
+            <td><span class="chip">{{ r.ref_no }}</span></td>
+            <td>{{ r.title }}</td>
+            <td>{{ r.category }}</td>
+            <td><span class="badge-soft info">{{ r.priority }}</span></td>
+            <td><span class="badge-soft success">{{ r.status }}</span></td>
+            <td>{{ r.owner }}</td>
+          </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
+  </section>
+
+  <section class="panel">
+    <div class="section-head">
+      <div>
+        <h2>Task Focus</h2>
+        <p>Quick area for work items and validation queues.</p>
+      </div>
+      <a class="btn btn-outline-light" href="/workflows">Open workflows</a>
+    </div>
+    <div class="empty-card">Dashboard widgets will expand here in the next slice.</div>
   </section>
 </div>
 {% endblock %}

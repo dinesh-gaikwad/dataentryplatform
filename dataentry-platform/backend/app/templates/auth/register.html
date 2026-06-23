@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-grid">
+  <section class="auth-card">
+    <h2>Create account</h2>
+    <p>Register a new platform member.</p>
+    <form class="stack" method="post" action="/api/auth/register">
+      <label>Full name</label>
+      <input name="full_name" type="text" required placeholder="John Doe">
+      <label>Email</label>
+      <input name="email" type="email" required placeholder="name@company.com">
+      <label>Password</label>
+      <input name="password" type="password" required placeholder="Create password">
+      <label>Role</label>
+      <select name="role">
+        <option value="user">user</option>
+        <option value="manager">manager</option>
+        <option value="admin">admin</option>
+      </select>
+      <button class="btn btn-primary">Register</button>
+    </form>
+  </section>
+  <section class="promo-panel">
+    <h3>Onboard users fast</h3>
+    <p>The register page is styled to match the rest of the shell.</p>
+  </section>
+</div>
+{% endblock %}

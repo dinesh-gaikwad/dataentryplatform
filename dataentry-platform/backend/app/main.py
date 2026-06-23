@@ -17,9 +17,9 @@ def startup():
     init_db()
 
 def render(request: Request, template: str, title: str, active: str, **ctx):
-    data = {"request": request, "page_title": title, "nav": nav_items(active)}
+    data = {"page_title": title, "nav": nav_items(active)}
     data.update(ctx)
-    return templates.TemplateResponse(template, data)
+    return templates.TemplateResponse(request, template, data)
 
 @app.get("/", response_class=HTMLResponse)
 def dashboard(request: Request):

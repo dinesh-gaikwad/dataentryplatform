@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-grid">
+  <section class="auth-card">
+    <h2>Login</h2>
+    <p>Access the DataEntry Platform workspace.</p>
+    <form class="stack" method="post" action="/api/auth/login">
+      <label>Email</label>
+      <input name="email" type="email" required placeholder="name@company.com">
+      <label>Password</label>
+      <input name="password" type="password" required placeholder="••••••••">
+      <button class="btn btn-primary">Sign In</button>
+    </form>
+  </section>
+  <section class="promo-panel">
+    <h3>Secure access</h3>
+    <p>Login page is ready for session flow, redirects, and validation.</p>
+    <ul class="feature-list">
+      <li>Form data support</li>
+      <li>Role-aware routing</li>
+      <li>Dashboard redirect</li>
+    </ul>
+  </section>
+</div>
+{% endblock %}

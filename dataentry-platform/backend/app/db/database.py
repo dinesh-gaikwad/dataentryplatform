@@ -1,5 +1,6 @@
 import sqlite3
 from pathlib import Path
+
 DB_FILE = Path("dataentry.db")
 
 def get_connection():

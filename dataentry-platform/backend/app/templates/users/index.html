@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 <section class="panel">
-  <h2>Users</h2>
-  <div class="table-responsive mt-3">
-    <table class="table table-dark table-hover align-middle">
-      <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
-      <tbody>
-        {% for u in users %}
-        <tr><td>{{ u.full_name }}</td><td>{{ u.email }}</td><td>{{ u.role }}</td><td>{{ u.status }}</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="section-head">
+    <div>
+      <h2>Module Ready</h2>
+      <p>Clean, modern, and responsive module shell.</p>
+    </div>
+    <div class="helper-row">
+      <span class="chip">Fast UI</span>
+      <span class="chip">Responsive</span>
+      <span class="chip">Ready</span>
+    </div>
   </div>
+  <div class="empty-card">This section will be expanded next.</div>
 </section>
 {% endblock %}
