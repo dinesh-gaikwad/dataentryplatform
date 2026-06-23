@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="content-grid">
+  <section class="kpi-row">
+    <div class="kpi-card"><span>Records</span><strong>{{ counts.records }}</strong></div>
+    <div class="kpi-card"><span>Users</span><strong>{{ counts.users }}</strong></div>
+    <div class="kpi-card"><span>Workflows</span><strong>{{ counts.workflows }}</strong></div>
+    <div class="kpi-card"><span>Imports</span><strong>{{ counts.imports }}</strong></div>
+  </section>
+  <section class="panel">
+    <h2>Recent Records</h2>
+    <div class="table-responsive">
+      <table class="table table-dark table-hover align-middle">
+        <thead><tr><th>Ref</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Owner</th></tr></thead>
+        <tbody>
+          {% for r in recent_records %}
+          <tr><td>{{ r.ref_no }}</td><td>{{ r.title }}</td><td>{{ r.category }}</td><td>{{ r.priority }}</td><td>{{ r.status }}</td><td>{{ r.owner }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}

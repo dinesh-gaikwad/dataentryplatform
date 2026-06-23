@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div><h2 class="mb-1">Records</h2><p class="mb-0 text-secondary">Validate and manage data entry records.</p></div>
+    <button class="btn btn-primary">New Record</button>
+  </div>
+  <div class="table-responsive mt-3">
+    <table class="table table-dark table-hover align-middle">
+      <thead><tr><th>Ref</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Owner</th><th>Due</th></tr></thead>
+      <tbody>
+        {% for r in records %}
+        <tr><td>{{ r.ref_no }}</td><td>{{ r.title }}</td><td>{{ r.category }}</td><td>{{ r.priority }}</td><td>{{ r.status }}</td><td>{{ r.owner }}</td><td>{{ r.due_date }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
