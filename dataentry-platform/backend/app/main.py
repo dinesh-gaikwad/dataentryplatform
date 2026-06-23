@@ -33,8 +33,17 @@ def dashboard(request: Request):
         "imports": cur.execute("SELECT COUNT(*) FROM imports").fetchone()[0],
     }
     recent_records = cur.execute("SELECT * FROM records ORDER BY id DESC LIMIT 5").fetchall()
+    active_user = cur.execute("SELECT * FROM users ORDER BY id ASC LIMIT 1").fetchone()
     conn.close()
-    return render(request, "dashboard/index.html", "Dashboard", "dashboard", counts=counts, recent_records=[dict(x) for x in recent_records])
+    return render(
+        request,
+        "dashboard/index.html",
+        "Dashboard",
+        "dashboard",
+        counts=counts,
+        recent_records=[dict(x) for x in recent_records],
+        active_user=dict(active_user) if active_user else None,
+    )
 
 @app.get("/records", response_class=HTMLResponse)
 def records(request: Request, q: str = ""):

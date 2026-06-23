@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% block content %}
 <div class="content-grid">
@@ -16,6 +17,26 @@
       <a class="btn btn-outline-light" href="/imports">Import File</a>
     </div>
   </section>
+
+  {% if active_user %}
+  <section class="panel profile-quick-card">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <div class="avatar-circle">{{ active_user.full_name[:1]|upper }}</div>
+      <div class="flex-grow-1">
+        <h3 class="mb-1">{{ active_user.full_name }}</h3>
+        <div class="text-secondary">{{ active_user.email }}</div>
+        <div class="helper-row mt-2">
+          <span class="chip">Role: {{ active_user.role }}</span>
+          <span class="chip">Status: {{ active_user.status }}</span>
+        </div>
+      </div>
+      <div class="helper-row">
+        <a class="btn btn-outline-light" href="/users/{{ active_user.id }}/profile">Open Profile</a>
+        <a class="btn btn-primary" href="/settings">Settings</a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
 
   <section class="kpi-row">
     <div class="kpi-card"><span>Records</span><strong>{{ counts.records }}</strong><small>Tracked</small></div>

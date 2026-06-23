@@ -1,0 +1,47 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="content-grid">
+  <section class="hero-card">
+    <div>
+      <h2 class="hero-title">{{ user.full_name }}</h2>
+      <p class="hero-sub">{{ user.email }}</p>
+      <div class="helper-row mt-3">
+        <span class="chip">Role: {{ user.role }}</span>
+        <span class="chip">Status: {{ user.status }}</span>
+      </div>
+    </div>
+    <div class="helper-row">
+      <a class="btn btn-primary" href="/users">Back to Users</a>
+      <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#userModal" onclick='openUserModal({{ user|tojson }})'>Edit Profile</button>
+    </div>
+  </section>
+
+  <section class="kpi-row">
+    <div class="kpi-card"><span>Records Owned</span><strong>{{ total_records }}</strong><small>Assigned</small></div>
+    <div class="kpi-card"><span>Role</span><strong>{{ user.role }}</strong><small>Access level</small></div>
+    <div class="kpi-card"><span>Status</span><strong>{{ user.status }}</strong><small>Account state</small></div>
+    <div class="kpi-card"><span>Department</span><strong>{{ user.department or 'N/A' }}</strong><small>Profile field</small></div>
+  </section>
+
+  <section class="panel">
+    <div class="section-head">
+      <div><h2>Recent Activity</h2><p>Latest actions linked to this user.</p></div>
+    </div>
+    {% if recent_logs %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead><tr><th>Action</th><th>Target</th><th>Time</th></tr></thead>
+        <tbody>
+          {% for l in recent_logs %}
+          <tr><td>{{ l.action }}</td><td>{{ l.target }}</td><td>{{ l.created_at }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-card">No activity found.</div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

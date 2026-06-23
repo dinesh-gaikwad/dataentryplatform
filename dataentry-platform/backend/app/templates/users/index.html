@@ -5,7 +5,7 @@
   <section class="hero-card">
     <div>
       <h2 class="hero-title">User Management</h2>
-      <p class="hero-sub">Accounts, roles, and access control in one place.</p>
+      <p class="hero-sub">Accounts, roles, access control, and profile dashboards in one place.</p>
     </div>
     <div class="helper-row">
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#userModal" onclick="openUserModal()">Add User</button>
@@ -22,7 +22,7 @@
         <tbody>
           {% for u in users %}
           <tr>
-            <td>{{ u.full_name }}</td>
+            <td><a href="/users/{{ u.id }}/profile">{{ u.full_name }}</a></td>
             <td>{{ u.email }}</td>
             <td><span class="badge-soft info">{{ u.role }}</span></td>
             <td><span class="badge-soft success">{{ u.status }}</span></td>
